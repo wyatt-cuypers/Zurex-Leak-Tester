@@ -1,1 +1,0 @@
-exec up_LeakTesterFullData_AddRec @MachineID='1',@GMTTime='6/21/2022 7:24:28 PM',@LocalTime='6/21/2022 2:24:28 PM',@Seq=20,@Step='Vent',@Seconds='0.90s',@Data1='0.0000',@Data2='0.0000',@Data3='0.0000',@Data4='****'
