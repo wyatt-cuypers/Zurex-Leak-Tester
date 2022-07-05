@@ -19,21 +19,9 @@ Public Class frmMain
     Dim objTimerLock As New Object
     Dim intTesterTimerCounter As Integer
 
-    'Checks if the leak tester is currently connected to the application
-    'Public Function isConnected() As String
-    '    Dim str As String = ""
-    '    Try
-    '        If objClient.Connected = True Then
-    '            str = "Connected"
-    '        Else
-    '            str = "Not Connected"
-    '        End If
-    '    Catch ex As Exception
-    '        MessageBox.Show(ex.ToString)
-    '    End Try
-    '    Return str
-    'End Function
-
+    'Method that connects the program to the leak tester
+    'If a connection cannot be made after the number of times stored in MAX_RETRIES,
+    'a form is displayed on the screen alerting the user and the program closes
     Public Sub Connect()
         Const MAX_RETRIES As Integer = 1
         Dim intRetries As Integer
@@ -57,26 +45,6 @@ Public Class frmMain
         Dim frmStartPage = New frmStartPage
         frmStartPage.ShowDialog()
 
-        'If Not isConnected() Then
-        '    Const MAX_RETRIES As Integer = 1
-        '    Dim intRetries As Integer
-        '    While intRetries < MAX_RETRIES
-        '        Try
-        '            objClient.Client.Disconnect(False)
-        '            objClient = New TcpClient()
-        '            objClient.Connect(objLocalAddress, strPortNum)
-        '            Exit While
-        '        Catch ex As Exception
-        '            Thread.Sleep(1000)
-        '            intRetries = intRetries + 1
-        '        End Try
-        '    End While
-        '    If intRetries = MAX_RETRIES Then
-        '        frmError.ShowDialog()
-        '        Application.Exit()
-        '    End If
-        'End If
-
         Connect()
 
         'Checks for Data folder, creates one if there is not one in the directory
@@ -93,9 +61,6 @@ Public Class frmMain
         lblDate.Text = DateAndTime.Today
         lblTime.Text = DateAndTime.Now.ToLongTimeString
 
-        'Displays connection status
-        'lblConnection.Text = "Status: " & isConnected()
-
         'Starts the timer that updates the date, time, and connection status
         tmrTimeDate.Start()
 
@@ -105,7 +70,7 @@ Public Class frmMain
         tmrSqlProcessor.Start()
     End Sub
 
-    'Helper method used to avoid cross-thread exceptions
+    'Used to avoid cross-thread exceptions
     Private Delegate Sub AppendTextBoxDelegate(ByVal txt As RichTextBox, ByVal str As String)
     Private Sub AppendTextBoxes(ByVal txt As RichTextBox, ByVal str As String)
         If txt.InvokeRequired Then
@@ -115,7 +80,7 @@ Public Class frmMain
         End If
     End Sub
 
-    'Helper method used to avoid cross-thread exceptions
+    'Used to avoid cross-thread exceptions
     Private Delegate Sub AddChartDataDelegate(ByVal chart As Windows.Forms.DataVisualization.Charting.Chart, ByVal str As String, ByVal str2 As String)
     Private Sub AddChartData(ByVal chart As Windows.Forms.DataVisualization.Charting.Chart, ByVal str As String, ByVal str2 As String)
         If chart.InvokeRequired Then
@@ -129,7 +94,7 @@ Public Class frmMain
         End If
     End Sub
 
-    'Helper method used to avoid cross-thread exceptions
+    'Used to avoid cross-thread exceptions
     Private Delegate Sub ClearChartDataDelegate(ByVal chart As Windows.Forms.DataVisualization.Charting.Chart, ByVal str As String)
     Private Sub ClearChartData(ByVal chart As Windows.Forms.DataVisualization.Charting.Chart, ByVal str As String)
         If chart.InvokeRequired Then
@@ -141,7 +106,8 @@ Public Class frmMain
 
     'Gets the stream from the TCP client, checks if it is possible to read from the stream, and if it is,
     'it reads the input in a loop until the client is disconnected. Simultaneously displays the input
-    'in the DataTxtBox while also writing to a new .sql file that is created everytime the application runs
+    'in the DataTxtBox, on a chart control, appends to a file that is stored in the raw data folder, 
+    'and creates a new .sql for every line of input
     Private Sub bgwMain_DoWork(ByVal sender As Object, ByVal e As System.ComponentModel.DoWorkEventArgs) Handles bgwMain.DoWork
         Dim arrColumns As String()
         Dim objGmtTime As Date = Date.UtcNow
@@ -236,7 +202,7 @@ Public Class frmMain
         End Try
     End Sub
 
-    'Reused from Voltaire code, tries to create file with current date/time, if file already exists, sleeps for half a second and tries again. Max tries is six
+    'Tries to create file with current date/time, if file already exists, sleeps for half a second and tries again. Max tries is six
     Public Sub Create_SQL_File(strPassedData As String, strPassedEnd As String)
         Const MAX_RETRIES As Integer = 6
 
@@ -259,7 +225,7 @@ Public Class frmMain
         End If
     End Sub
 
-    'Checks every sixty seconds to see if SQL Processor is running, starts it if it is not
+    'Checks every sixty seconds to see if companion program SQL Processor is running, starts it if it is not
     Private Sub tmrSqlProcessor_Tick(sender As Object, e As EventArgs) Handles tmrSqlProcessor.Tick
         Dim objP() As Process
         objP = Process.GetProcessesByName("SQL Processor")
@@ -274,7 +240,7 @@ Public Class frmMain
         End If
     End Sub
 
-    'Helper methods used to avoid cross-thread exceptions
+    'Used to avoid cross-thread exceptions
     Public Sub changeText(obj, str)
         obj.text = str
     End Sub
@@ -304,7 +270,7 @@ Public Class frmMain
         End While
     End Sub
 
-    'Pause the background worker, disconnect the client, resume the background worker, reconnect the client
+    'Pauses the background worker, disconnects the client, resumes the background worker and reconnects the client
     Private Sub bgwTesterConnect_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles bgwTesterConnect.DoWork
         Try
             bgwMain.WorkerSupportsCancellation = True
@@ -324,7 +290,7 @@ Public Class frmMain
         End Try
     End Sub
 
-    ''Subroutine that dynamically updates the current date, time, and connection status
+    'Dynamically updates the current date, time, and connection status
     Private Sub tmrTimeDate_Tick(sender As Object, e As EventArgs) Handles tmrTimeDate.Tick
         lblTime.Text = DateTime.Now.ToLongTimeString
         'lblConnection.Text = "Status: " & isConnected()
