@@ -1,5 +1,5 @@
 # Zurex Leak Tester
-The Zurex Leak Tester program is a windows forms application written in Visual Basic .NET. The purpose of writing this program was to be able to more easily capture and store data coming from the Isaac Leak Tester used on the 701 press.
+The Zurex Leak Tester program is a windows forms application written in Visual Basic .NET. The purpose of writing this program was to be able to more easily capture and store data coming from an Isaac Leak Tester.
 
 # Startup
 When running, the leak tester is connected to a desktop via ethernet cable. Upon startup, the program attempts to connect to the leak tester by instantiating a new TcpClient object. The parameters for this object are read from a settings file which is stored in the project directory. If the program is unable to connect to the leak tester, a form is diplayed on the screen, and the program shuts itself down. If the connection is sucessful, a form which has the name of the program and the version number is displayed on the screen for a few seconds. Behind the scenes, the program checks to see if folders titled Data and Raw Data exist, and if they do not, they are created. After this, the main form is displayed. 
@@ -35,7 +35,7 @@ exec up_LeakTesterFullData_AddRec @MachineID='1',@GMTTime='6/21/2022 7:32:14 PM'
 exec up_LeakTester_AddRec @MachineID='1',@GMTTime='6/21/2022 7:32:14 PM',@LocalTime='6/21/2022 2:32:14 PM',@ProgramNumber=01,@ProgramName='PROG 1',@TestType='PD',@Result1='Lo Pressure',@Value1='0.0120',@Result2='Lo Pressure',@Value2='0.0083',@Result3='Lo Pressure',@Value3='0.0011',@Result4='Lo Pressure',@Value4='0.0076'
 
 # Example data
-Clamp1	0.00	s	0.0000	0.0000	0.0000\n
+Clamp1	0.00	s	0.0000	0.0000	0.0000            
 Fill  	1.40	s	0.0120	0.0083	0.0012
 Fill  	1.30	s	0.0120	0.0083	0.0012
 Fill  	1.20	s	0.0120	0.0083	0.0012
