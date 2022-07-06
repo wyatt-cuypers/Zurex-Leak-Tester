@@ -35,7 +35,7 @@ exec up_LeakTesterFullData_AddRec @MachineID='1',@GMTTime='6/21/2022 7:32:14 PM'
 exec up_LeakTester_AddRec @MachineID='1',@GMTTime='6/21/2022 7:32:14 PM',@LocalTime='6/21/2022 2:32:14 PM',@ProgramNumber=01,@ProgramName='PROG 1',@TestType='PD',@Result1='Lo Pressure',@Value1='0.0120',@Result2='Lo Pressure',@Value2='0.0083',@Result3='Lo Pressure',@Value3='0.0011',@Result4='Lo Pressure',@Value4='0.0076'
 
 # Example data
-Clamp1	0.00	s	0.0000	0.0000	0.0000            
+Clamp1	0.00	s	0.0000	0.0000	0.0000  
 Fill  	1.40	s	0.0120	0.0083	0.0012
 Fill  	1.30	s	0.0120	0.0083	0.0012
 Fill  	1.20	s	0.0120	0.0083	0.0012
